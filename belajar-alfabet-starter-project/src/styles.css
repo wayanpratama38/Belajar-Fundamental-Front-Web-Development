@@ -46,12 +46,11 @@ header .wrapper {
 .char-list {
   margin-block: 1rem;
 
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px, 1fr));
 
-  column-gap: 2%;
-  row-gap: 24px;
+  column-gap: 24px;
+  row-gap: 32px;
 }
 
 .char-item {
@@ -59,8 +58,7 @@ header .wrapper {
   border-radius: 8px;
   padding: 16px;
 
-  flex-basis: 15%;
-
+  overflow: hidden;
   transition: all 150ms ease-in;
 }
 
