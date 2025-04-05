@@ -172,7 +172,6 @@ button:not(:disabled):hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive layout for Android devices (large to small) */
 @media screen and (max-width: 1024px) {
   main {
     grid-template-columns: 1fr;

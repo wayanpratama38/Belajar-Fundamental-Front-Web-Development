@@ -18,5 +18,32 @@ function generateCreatedTime(){
     return date.toISOString();
 }
 
+function findNotesIndex(id){
+    return notesData.findIndex(note=> note.id === id);
+}
 
-export { generateRandomID, generateCreatedTime } ;
+function deleteNote(id){
+    const index = findNotesIndex(id);
+    if(index !== -1){
+        notesData.splice(index,1);
+        document.querySelector("note-render").render();
+    }
+}
+
+function archiveNote(id){
+    const note = notesData[findNotesIndex(id)];
+    if(note){
+        note.archived = true;
+        document.querySelector("note-render").render();
+    }
+}
+
+function unarchiveNote(id){
+    const note = notesData[findNotesIndex(id)];
+    if(note){
+        note.archived = false;
+        document.querySelector("note-render").render();
+    }
+}
+
+export { generateRandomID, generateCreatedTime, deleteNote, archiveNote, unarchiveNote } ;

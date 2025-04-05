@@ -1,4 +1,4 @@
-import { generateCreatedTime, generateRandomID } from "./utils.js";
+import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote } from "./utils.js";
 
 class AppBar extends HTMLElement{
     connectedCallback(){
@@ -72,6 +72,15 @@ class ArchivedNoteItem extends HTMLElement{
             </button>
         </div>
     `;
+        const noteId = this.getAttribute("note-id");
+        this.querySelector("#deleteButton").addEventListener("click",()=>{
+            deleteNote(noteId);
+        });
+
+        this.querySelector("#unarchiveButton").addEventListener("click",()=>{
+            unarchiveNote(noteId)
+        });
+        
     }
 }
 
@@ -95,6 +104,17 @@ class ActiveNoteItem extends HTMLElement{
             </button>
         </div>
         `;
+        
+        const noteId = this.getAttribute("note-id");
+        this.querySelector("#deleteButton").addEventListener("click",()=>{
+            
+            deleteNote(noteId);
+        });
+
+        this.querySelector("#archiveButton").addEventListener("click",()=>{
+            archiveNote(noteId)
+        });
+
     }
 }
 
@@ -115,7 +135,7 @@ class NoteRender extends HTMLElement{
         <div class="noteList">
             ${activeNotes.map(
                 (note)=>
-                    `<active-note-item title="${note.title}" message="${note.body}" class="noteListItem"></active-note-item>`
+                    `<active-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></active-note-item>`
             ).join("")}
         </div>
         
@@ -125,14 +145,14 @@ class NoteRender extends HTMLElement{
         <div class="noteList">
             ${archivedNotes.map(
                 (note)=>
-                    `<archived-note-item title="${note.title}" message="${note.body}" class="noteListItem"></archived-note-item>`
+                    `<archived-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></archived-note-item>`
             ).join("")}
         </div>
         `;
     }
 }
 
-document.addEventListener("DOMContentLoaded",(event)=>{
+document.addEventListener("DOMContentLoaded",()=>{
     customElements.define("app-bar",AppBar)
     customElements.define("note-form",NoteForm);
     customElements.define("archived-note-item",ArchivedNoteItem);
