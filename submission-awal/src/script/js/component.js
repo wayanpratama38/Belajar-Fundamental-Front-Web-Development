@@ -3,7 +3,7 @@ import { generateCreatedTime, generateRandomID } from "./utils.js";
 class AppBar extends HTMLElement{
     connectedCallback(){
         this.innerHTML=`
-            <h1>Notes App</h1>
+        <h1>Notes App</h1>
         `;
     }
 }

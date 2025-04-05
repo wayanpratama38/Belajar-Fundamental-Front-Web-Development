@@ -20,19 +20,21 @@ main {
   display: grid;
   grid-template-columns: 4fr;
   gap: 1rem;
-  padding: 0 0.5rem;
+  padding: 1rem 1rem;
   width: 100%;
   max-width: 1300px;
   margin: 20px;
 }
 
 app-bar {
+  display: grid;
+  grid-template-columns: 1fr;
   background-color: #03346E;
   color: white;
   text-align: center;
   padding: 1rem;
-  font-size: 1.5rem;
   font-weight: bold;
+  min-width: 375px;
   width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
@@ -106,10 +108,9 @@ button:not(:disabled):hover {
 
 .noteList{
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
   gap: 1rem;
-  padding : 1rem 0;
-  
+  padding : 1rem 1rem;
 }
 
 .noteListItem{
@@ -129,6 +130,8 @@ button:not(:disabled):hover {
 .noteMessage{
   min-height: 5rem;
   margin-bottom: 0.5rem;
+  flex-grow: 1;
+  word-break: break-word;
 }
 
 #deleteButton{
@@ -137,7 +140,7 @@ button:not(:disabled):hover {
   align-items: center;
   justify-content: start;
   width: fit-content;
-  background-color: #6e0303;
+  background-color: #ab0202;
 }
 
 #archiveButton{
@@ -162,9 +165,86 @@ button:not(:disabled):hover {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1.5rem 0px;
   background-color: #03346E;
   color: white;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive layout for Android devices (large to small) */
+@media screen and (max-width: 1024px) {
+  main {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    margin: 10px;
+  }
+
+  .noteList {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  app-bar, .titleWrapper {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  input[type="text"],
+  textarea,
+  button {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  .noteList {
+    grid-template-columns: 1fr;
+    padding: 0.5rem;
+  }
+
+  note-form {
+    padding: 1rem;
+  }
+
+  .noteListItem {
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .titleWrapper {
+    font-size: 0.9rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  input[type="text"],
+  textarea,
+  button {
+    font-size: 0.85rem;
+  }
+
+  #checkboxWrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actionButton {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .noteList {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .noteListItem {
+    padding: 0.8rem;
+  }
 }
