@@ -1,4 +1,4 @@
-import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote } from "./utils.js";
+import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "./utils.js";
 
 class AppBar extends HTMLElement{
     connectedCallback(){
@@ -53,7 +53,39 @@ class NoteForm extends HTMLElement{
 
 
 class ArchivedNoteItem extends HTMLElement{
+    static get observedAttributes() {
+        return ['title','message','note-id'];
+    }
+
+    constructor(){
+        super();
+        this.handleUnarchived = this.handleUnarchived.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+    }
+
     connectedCallback(){
+        this.render();        
+        this.querySelector("#deleteButton").addEventListener("click",this.handleDelete);
+        this.querySelector("#unarchiveButton").addEventListener("click",this.handleUnarchived);
+    }
+
+    handleUnarchived(){
+        const notesId = this.getAttribute("note-id");
+        unarchiveNote(notesId);
+    }
+
+    handleDelete(){
+        const notesId = this.getAttribute("note-id");
+        deleteNote(notesId);
+    }
+
+    attributeChangedCallback(oldValue, newValue) {
+        if (oldValue !== newValue) {
+          this.render();
+        }
+    }
+
+    render(){
         this.innerHTML = `
         <h2>${this.getAttribute("title")}</h2>
         <p class="noteMessage">${this.getAttribute("message")}</p>
@@ -71,21 +103,45 @@ class ArchivedNoteItem extends HTMLElement{
                 </span>
             </button>
         </div>
-    `;
-        const noteId = this.getAttribute("note-id");
-        this.querySelector("#deleteButton").addEventListener("click",()=>{
-            deleteNote(noteId);
-        });
-
-        this.querySelector("#unarchiveButton").addEventListener("click",()=>{
-            unarchiveNote(noteId)
-        });
-        
+        `;
     }
 }
 
 class ActiveNoteItem extends HTMLElement{
+    static get observedAttributes() {
+        return ['title','message','note-id'];
+    }
+
+    constructor() {
+        super();
+        this.handleArchive = this.handleArchive.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+    }
+
+    handleArchive(){
+        const noteId = this.getAttribute("note-id");
+        archiveNote(noteId)
+    }
+
+    handleDelete(){
+        const noteId = this.getAttribute("note-id");
+        deleteNote(noteId);
+    }
+    
     connectedCallback(){
+        this.render();
+        this.querySelector("#deleteButton").addEventListener("click",this.handleDelete);
+        this.querySelector("#archiveButton").addEventListener("click",this.handleArchive);
+    }
+
+    attributeChangedCallback(oldValue, newValue) {
+        if (oldValue !== newValue) {
+          this.render();
+        }
+    }
+    
+
+    render(){
         this.innerHTML = `
         <h2>${this.getAttribute("title")}</h2>
         <p class="noteMessage">${this.getAttribute("message")}</p>
@@ -104,17 +160,6 @@ class ActiveNoteItem extends HTMLElement{
             </button>
         </div>
         `;
-        
-        const noteId = this.getAttribute("note-id");
-        this.querySelector("#deleteButton").addEventListener("click",()=>{
-            
-            deleteNote(noteId);
-        });
-
-        this.querySelector("#archiveButton").addEventListener("click",()=>{
-            archiveNote(noteId)
-        });
-
     }
 }
 

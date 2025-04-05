@@ -46,4 +46,12 @@ function unarchiveNote(id){
     }
 }
 
-export { generateRandomID, generateCreatedTime, deleteNote, archiveNote, unarchiveNote } ;
+function customValidationHandler(event){
+    event.target.setCustomValidation('');
+    if(event.target.validity.valueMissing) {
+        event.target.setCustomValidation("Wajib diisi!.");
+        return;
+    }
+}
+
+export { generateRandomID, generateCreatedTime, deleteNote, archiveNote, unarchiveNote, customValidationHandler } ;
