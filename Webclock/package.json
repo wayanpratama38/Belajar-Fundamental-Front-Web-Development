@@ -4,8 +4,7 @@
   "description": "testing npm",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "http-server"
+    "build": "webpack"
   },
   "author": "wynprtm",
   "license": "ISC",
@@ -14,6 +13,7 @@
     "moment": "^2.30.1"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "webpack": "^5.99.5",
+    "webpack-cli": "^6.0.1"
   }
 }
