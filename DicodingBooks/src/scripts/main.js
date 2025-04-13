@@ -44,6 +44,24 @@ function main() {
 
   const updateBook = (book) => {
     // tuliskan kode di sini!
+    fetch(`${baseUrl}/edit/${book.id}`,{
+      method : "PUT",
+      headers : {
+        "Content-Type" : "application/json",
+        "X-Auth-Token" : "12345"
+      },
+      body : JSON.stringify(book)
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseJson) => {
+        showResponseMessage(responseJson.message);
+        getBook();
+      })
+      .catch((error) => {
+        showResponseMessage(error);
+      })
 
     const xhr = new XMLHttpRequest();
 
