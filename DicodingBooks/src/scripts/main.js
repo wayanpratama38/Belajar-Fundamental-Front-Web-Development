@@ -3,25 +3,20 @@ function main() {
 
   const getBook = () => {
     // tuliskan kode di sini!
-    const xhr = new XMLHttpRequest();
-
-    xhr.onload = function (){
-      const responseJson = JSON.parse(this.responseText)
-
-      if(responseJson.error){
-        showResponseMessage(responseJson.message);
-      } else { 
-        renderAllBooks(responseJson.books);
-      }
-    }
-
-    xhr.onerror = function () {
-      showResponseMessage();
-    };
-
-    xhr.open("GET",`${baseUrl}/list`);
-
-    xhr.send();
+    fetch(`${baseUrl}/list`)
+      .then((response)=> {
+        return response.json();
+      })
+      .then((responseJson)=>{
+        if(responseJson.error){
+          showResponseMessage(responseJson.message);
+        }else{
+          renderAllBooks(responseJson.books);
+        }
+      })
+      .catch((error) => {
+        showResponseMessage(error);
+      });
   };
 
 
@@ -94,7 +89,7 @@ function main() {
 
     xhr.send();
   };
-  
+
   /*
       jangan ubah kode di bawah ini ya!
   */
