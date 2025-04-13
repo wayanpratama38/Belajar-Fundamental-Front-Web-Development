@@ -56,7 +56,7 @@ function main() {
 
     xhr.onload = function () {
       const responseJson = JSON.parse(this.responseText);
-      showResponseMessage(responseJson);
+      showResponseMessage(responseJson.message);
       getBook();
     }
 
@@ -75,12 +75,25 @@ function main() {
 
   const removeBook = (bookId) => {
     // tuliskan kode di sini!
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+      const responseJson = JSON.parse(this.responseText);
+      showResponseMessage(responseJson.message);
+      getBook();
+    }
+
+    xhr.onerror = function (){
+      showResponseMessage();
+    }
+
+    xhr.open("DELETE",`${baseUrl}/delete/${bookId}`);
+
+    xhr.setRequestHeader("X-Auth-Token",'12345');
+
+    xhr.send();
   };
-
-
-  
-  
-  
   
   /*
       jangan ubah kode di bawah ini ya!
