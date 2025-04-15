@@ -1,5 +1,6 @@
-import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "./utils.js";
-import { notesData } from "./data.js";
+import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "../utils.js";
+import notesData from "../data/data.js";
+import "../../style/style.css";
 
 class AppBar extends HTMLElement{
     connectedCallback(){
