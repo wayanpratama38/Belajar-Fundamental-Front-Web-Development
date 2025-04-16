@@ -1,6 +1,8 @@
 import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "../utils.js";
-import notesData from "../data/data.js";
+import { notesData, activeNotes, achivedNotes } from "../data/data.js";
 import "../../style/style.css";
+
+
 
 class AppBar extends HTMLElement{
     connectedCallback(){
@@ -170,32 +172,40 @@ class NoteRender extends HTMLElement{
         this.render();
     }
 
-    render(){
-        const archivedNotes = notesData.filter(note=> note.archived)
-        const activeNotes = notesData.filter(note=>!note.archived)
-
-        this.innerHTML =
-        `
-        <div class="titleWrapper">
-            <h1>Active Notes</h1>
-        </div>
-        <div class="noteList">
-            ${activeNotes.map(
-                (note)=>
-                    `<active-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></active-note-item>`
-            ).join("")}
-        </div>
+    async render(){
+        try{
+            console.log(await activeNotes);
+            console.log(await achivedNotes);
+            console.log("TEST");
+            this.innerHTML =
+            `
+            <div class="titleWrapper">
+                <h1>Active Notes</h1>
+            </div>
+            <div class="noteList">
+                ${activeNotes.map(
+                    (note)=>
+                        `<active-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></active-note-item>`
+                ).join("")}
+            </div>
+            
+            <div class="titleWrapper">
+                <h1>Archived Notes</h1>
+            </div>
+            <div class="noteList">
+                ${archiveNotes.map(
+                    (note)=>
+                        `<archived-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></archived-note-item>`
+                ).join("")}
+            </div>
+            `;
+        }catch(error){
+            console.log(await _data_data_js__WEBPACK_IMPORTED_MODULE_1__.activeNotes);
+            console.log(await _data_data_js__WEBPACK_IMPORTED_MODULE_1__.achivedNotes);
+            
+            console.log(error);
+        }
         
-        <div class="titleWrapper">
-            <h1>Archived Notes</h1>
-        </div>
-        <div class="noteList">
-            ${archivedNotes.map(
-                (note)=>
-                    `<archived-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></archived-note-item>`
-            ).join("")}
-        </div>
-        `;
     }
 }
 

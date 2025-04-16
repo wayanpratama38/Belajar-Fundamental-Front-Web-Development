@@ -1,3 +1,5 @@
+import {notesData} from "./data/data.js";
+
 function generateRandomLetter() {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";     
     return alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -30,16 +32,16 @@ function deleteNote(id){
     }
 }
 
-function archiveNote(id){
-    const note = notesData[findNotesIndex(id)];
+async function archiveNote(id){
+    const note = await notesData[findNotesIndex(id)];
     if(note){
         note.archived = true;
         document.querySelector("note-render").render();
     }
 }
 
-function unarchiveNote(id){
-    const note = notesData[findNotesIndex(id)];
+async function unarchiveNote(id){
+    const note = await notesData[findNotesIndex(id)];
     if(note){
         note.archived = false;
         document.querySelector("note-render").render();
