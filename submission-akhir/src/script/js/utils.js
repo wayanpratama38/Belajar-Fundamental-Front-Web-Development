@@ -1,6 +1,12 @@
-import { getAllNotes } from "./data/data.js";
+import { getAllNotes, archiveNotes, unarchiveNotes, deleteNotes } from "./data/data.js";
 
-const notesData = getAllNotes();
+async function init() {
+    notesData = await getAllNotes();
+    console.log("Notes Data Berhasil diambil")
+}
+
+let notesData = [];
+init();
 
 function generateRandomLetter() {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";     
@@ -26,27 +32,57 @@ function findNotesIndex(id){
     return notesData.findIndex(note=> note.id === id);
 }
 
-function deleteNote(id){
-    const index = findNotesIndex(id);
-    if(index !== -1){
-        notesData.splice(index,1);
-        document.querySelector("note-render").render();
+async function deleteNote(id){
+    try{
+        const index = findNotesIndex(id);
+        const note = await notesData[index];
+        if (note) {
+            const response = await deleteNotes(note);
+            console.log("Delete Response : ",response);
+            if (response.status === "success") {
+              notesData.splice(index,1);
+                document.querySelector("note-render").render();
+
+            }
+        }
+    } catch(error) {
+        console.log(error);
     }
 }
 
 async function archiveNote(id){
-    const note = await notesData[findNotesIndex(id)];
-    if(note){
-        note.archived = true;
+    try{
+        const note = await notesData[findNotesIndex(id)];
+        if(note){
+            note.archived = true;
+            const response =  await archiveNotes(note);
+            if (response.status === "success") {
+                console.log(`Note dengan ID ${id} berhasil diarsipkan!`);
+            } else {
+                console.error(`Gagal mengarsipkan note dengan ID ${id}`);
+            }
+        }
         document.querySelector("note-render").render();
+    } catch(error) {
+        console.log(error);
     }
 }
 
 async function unarchiveNote(id){
-    const note = await notesData[findNotesIndex(id)];
-    if(note){
-        note.archived = false;
+    try{
+        const note = await notesData[findNotesIndex(id)];
+        if(note){
+            note.archived = false;
+            const response =  await unarchiveNotes(note);
+            if (response.status === "success") {
+                console.log(`Note dengan ID ${id} berhasil dibatalkan!`);
+            } else {
+                console.error(`Gagal mengarsipkan note dengan ID ${id}`);
+            }
+        }
         document.querySelector("note-render").render();
+    }catch(error){
+        console.log(error);
     }
 }
 
@@ -58,4 +94,11 @@ function customValidationHandler(event){
     }
 }
 
-export { generateRandomID, generateCreatedTime, deleteNote, archiveNote, unarchiveNote, customValidationHandler } ;
+export { 
+    generateRandomID, 
+    generateCreatedTime, 
+    deleteNote, 
+    archiveNote, 
+    unarchiveNote, 
+    customValidationHandler 
+} ;

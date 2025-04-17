@@ -1,5 +1,5 @@
-import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "../utils.js";
-import { filteredActiveNotes, filteredArchivedNotes, insertNotes } from "../data/data.js";
+import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote } from "../utils.js";
+import { getArchivedNotes, getAllNotes, insertNotes } from "../data/data.js";
 import "../../style/style.css";
 
 
@@ -21,10 +21,6 @@ class NoteForm extends HTMLElement{
                     placeholder="Message" 
                     required
                 ></textarea>
-                <div id="checkboxWrapper">
-                    <input type="checkbox" id="check" checked>
-                    <label for="check">Archive this note?</label>
-                </div>
                 <button type="submit" id="add" disabled=true>Add Notes</button>
             </form>
         `;
@@ -40,13 +36,12 @@ class NoteForm extends HTMLElement{
 
         form.addEventListener("submit", async (event)=>{
             event.preventDefault();
-            const isArchive = this.querySelector("#check").checked;
             const newNotes = {
                 id : generateRandomID(),
                 title : title.value,
                 body : message.value,
                 createdAt : generateCreatedTime(),
-                archived : isArchive
+                archived : false
             }
             await insertNotes(newNotes);
             document.querySelector("note-render").render();
@@ -174,8 +169,8 @@ class NoteRender extends HTMLElement{
 
     async render(){
         try{
-            const activeNotes = await filteredActiveNotes();
-            const archivedNotes = await filteredArchivedNotes();
+            const activeNotes = await getAllNotes();
+            const archivedNotes = await getArchivedNotes();
             console.log(activeNotes);
             console.log(archivedNotes);
             this.innerHTML =

@@ -18,35 +18,34 @@ const getAllNotes = async () => {
   })
 }
 
-const filteredArchivedNotes = async () => {
-  const notes = await getAllNotes();
-  return notes
-  .filter((note)=>{
-    return note.archived===true;
+const getArchivedNotes = async () => {
+  return fetch(`${baseUrl}/notes/archived`)
+  .then((response)=>{
+    if(response.status === 200){
+      return response.json();
+    }else {
+      return [];
+    }
   })
-  .map(note=>{
-    return note;
-  });
+  .then((responseJson)=>{
+    return responseJson.data.length > 0 ? responseJson.data : [];
+  })
+  .catch((error)=>{
+    console.log(error);
+    return [];
+  })
 }
 
-const filteredActiveNotes = async () => {
-  const notes = await getAllNotes();
-  return notes
-  .filter((note) => {
-    // console.log(note.archived?"true" : "false",note.title);
-    return note.archived===false;
-  })
-  .map(note => {
-    return note;
-  });
-}
 
 const insertNotes = async (note) => {
+  const title = typeof note.title === "string" ? note.title : String(note.title);
+  const body = typeof note.body === "string" ? note.body : String(note.body);
+
   await fetch(`${baseUrl}/notes`,{
     method : "POST",
     body : JSON.stringify({
-      title : note.title,
-      body : note.body,
+      title : title,
+      body : body,
     }),
     headers : {
       'Content-type' : 'application/json'
@@ -57,7 +56,7 @@ const insertNotes = async (note) => {
       if(!response.ok){
         throw new Error(data.message)
       }
-      return data
+      return data;
     })
   })
   .then((data)=>{
@@ -68,4 +67,77 @@ const insertNotes = async (note) => {
   })
 }
 
-export { getAllNotes, insertNotes, filteredActiveNotes, filteredArchivedNotes };
+
+const archiveNotes = async (note) => {
+  return await fetch(`${baseUrl}/notes/${note.id}/archive`,{
+    method : "POST",
+    headers : {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(async (responseJson)=>{
+    return responseJson.json().then(data=>{
+      if(!responseJson.ok){
+        throw new Error(data.message)
+      }
+      return data;
+    })
+  })
+  .then(response=>{
+    console.log(response);
+    return response;
+  })
+  .catch(error=>{
+    console.log(error);
+  })
+}
+
+const unarchiveNotes = async (note) => {
+  return await fetch(`${baseUrl}/notes/${note.id}/unarchive`,{
+    method : "POST",
+    headers : {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(async (responseJson)=>{
+    return responseJson.json().then(data=>{
+      if(!responseJson.ok){
+        throw new Error(data.message)
+      }
+      return data;
+    })
+  })
+  .then(response=>{
+    console.log(response);
+    return response;
+  })
+  .catch(error=>{
+    console.log(error);
+  })
+}
+
+const deleteNotes = async (note) => {
+  return await fetch(`${baseUrl}/notes/${note.id}`,{
+    method : "DELETE"
+  })
+  .then(async (responseJson)=>{
+    return responseJson.json().then(data=>{
+      if(!responseJson.ok){
+        throw new Error(data.message)
+      }
+      return data;
+    })
+  })
+  .catch(error=>{
+    console.log(error);
+  })
+}
+
+export { 
+  archiveNotes, 
+  getAllNotes, 
+  getArchivedNotes,
+  insertNotes,
+  unarchiveNotes,
+  deleteNotes
+};
