@@ -1,5 +1,5 @@
 import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "../utils.js";
-import { notesData, activeNotes, achivedNotes } from "../data/data.js";
+import { notesData, filteredActiveNotes, filteredArchivedNotes } from "../data/data.js";
 import "../../style/style.css";
 
 
@@ -174,9 +174,10 @@ class NoteRender extends HTMLElement{
 
     async render(){
         try{
-            console.log(await activeNotes);
-            console.log(await achivedNotes);
-            console.log("TEST");
+            const activeNotes = await filteredActiveNotes();
+            const archivedNotes = await filteredArchivedNotes();
+            console.log(activeNotes);
+            console.log(archivedNotes);
             this.innerHTML =
             `
             <div class="titleWrapper">
@@ -193,16 +194,13 @@ class NoteRender extends HTMLElement{
                 <h1>Archived Notes</h1>
             </div>
             <div class="noteList">
-                ${archiveNotes.map(
+                ${archivedNotes.map(
                     (note)=>
                         `<archived-note-item note-id="${note.id}" title="${note.title}" message="${note.body}" class="noteListItem"></archived-note-item>`
                 ).join("")}
             </div>
             `;
-        }catch(error){
-            console.log(await _data_data_js__WEBPACK_IMPORTED_MODULE_1__.activeNotes);
-            console.log(await _data_data_js__WEBPACK_IMPORTED_MODULE_1__.achivedNotes);
-            
+        }catch (error) {        
             console.log(error);
         }
         
