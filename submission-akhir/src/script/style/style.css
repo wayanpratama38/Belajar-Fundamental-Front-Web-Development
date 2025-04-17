@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Playfair Display" , sans-serif;
+  font-family: 'Playfair Display', sans-serif;
 }
 
 body {
@@ -14,7 +14,6 @@ body {
   margin: 0;
   padding: 0;
 }
-  
 
 main {
   display: grid;
@@ -29,7 +28,7 @@ main {
 app-bar {
   display: grid;
   grid-template-columns: 1fr;
-  background-color: #03346E;
+  background-color: #03346e;
   color: white;
   text-align: center;
   padding: 1rem;
@@ -39,7 +38,7 @@ app-bar {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-note-form{
+note-form {
   background-color: white;
   padding: 1.5rem;
   border-radius: 8px;
@@ -50,7 +49,7 @@ note-form{
   animation: fadeIn 0.5s ease-in-out;
 }
 
-input[type="text"],
+input[type='text'],
 textarea {
   padding: 0.75rem;
   border: 1px solid #ccc;
@@ -65,7 +64,7 @@ textarea {
   white-space: nowrap;
 }
 
-#checkboxWrapper{
+#checkboxWrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -74,7 +73,7 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-color: #6EACDA;
+  border-color: #6eacda;
   outline: none;
 }
 
@@ -86,7 +85,7 @@ textarea {
 }
 
 button {
-  background-color: #6EACDA;
+  background-color: #6eacda;
   color: white;
   padding: 0.75rem;
   border: none;
@@ -94,7 +93,9 @@ button {
   width: 100%;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 button:disabled {
@@ -103,38 +104,38 @@ button:disabled {
 }
 
 button:not(:disabled):hover {
-  background-color: #03346E;
+  background-color: #03346e;
 }
 
-.noteList{
+.noteList {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 1rem;
-  padding : 1rem 1rem;
+  padding: 1rem 1rem;
 }
 
-.noteListItem{
+.noteListItem {
   background-color: white;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.actionButton{
+.actionButton {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
 }
 
-.noteMessage{
+.noteMessage {
   min-height: 5rem;
   margin-bottom: 0.5rem;
   flex-grow: 1;
   word-break: break-word;
 }
 
-#deleteButton{
+#deleteButton {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -143,11 +144,11 @@ button:not(:disabled):hover {
   background-color: #ed0303;
 }
 
-#deleteButton:hover{
+#deleteButton:hover {
   background-color: rgb(144, 0, 0);
 }
 
-#archiveButton{
+#archiveButton {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -156,11 +157,11 @@ button:not(:disabled):hover {
   background-color: rgb(1, 166, 1);
 }
 
-#archiveButton:hover{
+#archiveButton:hover {
   background-color: rgb(0, 96, 0);
 }
 
-#unarchiveButton{
+#unarchiveButton {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -169,23 +170,21 @@ button:not(:disabled):hover {
   background-color: rgb(0, 0, 191);
 }
 
-#unarchiveButton:hover{
+#unarchiveButton:hover {
   background-color: rgb(0, 0, 53);
 }
 
-
-.titleWrapper{
+.titleWrapper {
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 1.5rem 0px;
-  background-color: #03346E;
+  background-color: #03346e;
   color: white;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Loading overlay */
 #loading-overlay {
   position: fixed;
   top: 0;
@@ -212,8 +211,12 @@ button:not(:disabled):hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -229,12 +232,13 @@ button:not(:disabled):hover {
 }
 
 @media screen and (max-width: 768px) {
-  app-bar, .titleWrapper {
+  app-bar,
+  .titleWrapper {
     padding: 0.75rem;
     font-size: 1rem;
   }
 
-  input[type="text"],
+  input[type='text'],
   textarea,
   button {
     font-size: 0.95rem;
@@ -262,7 +266,7 @@ button:not(:disabled):hover {
     text-align: center;
   }
 
-  input[type="text"],
+  input[type='text'],
   textarea,
   button {
     font-size: 0.85rem;
