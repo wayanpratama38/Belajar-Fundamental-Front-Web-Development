@@ -1,5 +1,15 @@
-import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote } from "../utils.js";
-import { getArchivedNotes, getAllNotes, insertNotes } from "../data/data.js";
+import { 
+    generateCreatedTime, 
+    generateRandomID, 
+    deleteNote, 
+    archiveNote, 
+    unarchiveNote,
+    showLoading,
+    hideLoading } from "../utils.js";
+import { 
+    getArchivedNotes, 
+    getAllNotes, 
+    insertNotes } from "../data/data.js";
 import "../../style/style.css";
 
 
@@ -43,10 +53,19 @@ class NoteForm extends HTMLElement{
                 createdAt : generateCreatedTime(),
                 archived : false
             }
-            await insertNotes(newNotes);
-            document.querySelector("note-render").render();
+            try {
+                showLoading();
+                await insertNotes(newNotes);
+                title.value = '';
+                message.value = '';
+                addNoteButton.disabled = true;
+                document.querySelector("note-render").render();
+            } catch (error) { 
+                console.log(error);
+            } finally {
+                hideLoading();
+            }
         });
-
     }
 }
 
@@ -68,14 +87,14 @@ class ArchivedNoteItem extends HTMLElement{
         this.querySelector("#unarchiveButton").addEventListener("click",this.handleUnarchived);
     }
 
-    handleUnarchived(){
+    async handleUnarchived(){
         const notesId = this.getAttribute("note-id");
-        unarchiveNote(notesId);
+        await unarchiveNote(notesId);
     }
 
-    handleDelete(){
+    async handleDelete(){
         const notesId = this.getAttribute("note-id");
-        deleteNote(notesId);
+        await deleteNote(notesId);
     }
 
     attributeChangedCallback(oldValue, newValue) {
@@ -117,14 +136,14 @@ class ActiveNoteItem extends HTMLElement{
         this.handleDelete = this.handleDelete.bind(this);
     }
 
-    handleArchive(){
+    async handleArchive(){
         const noteId = this.getAttribute("note-id");
-        archiveNote(noteId)
+        await archiveNote(noteId)
     }
 
-    handleDelete(){
+    async handleDelete(){
         const noteId = this.getAttribute("note-id");
-        deleteNote(noteId);
+        await deleteNote(noteId);
     }
     
     connectedCallback(){
@@ -169,6 +188,7 @@ class NoteRender extends HTMLElement{
 
     async render(){
         try{
+            showLoading();
             const activeNotes = await getAllNotes();
             const archivedNotes = await getArchivedNotes();
             console.log(activeNotes);
@@ -195,8 +215,11 @@ class NoteRender extends HTMLElement{
                 ).join("")}
             </div>
             `;
-        }catch (error) {        
+        } catch (error) {        
             console.log(error);
+            this.innerHTML = `<p class="error">Error loading notes. Please try again later.</p>`;
+        } finally {
+            hideLoading();
         }
         
     }

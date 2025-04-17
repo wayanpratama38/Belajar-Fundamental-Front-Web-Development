@@ -1,12 +1,9 @@
-import { getAllNotes, archiveNotes, unarchiveNotes, deleteNotes } from "./data/data.js";
+import { 
+    archiveNotes, 
+    unarchiveNotes, 
+    deleteNotes, 
+    getSingleNote } from "./data/data.js";
 
-async function init() {
-    notesData = await getAllNotes();
-    console.log("Notes Data Berhasil diambil")
-}
-
-let notesData = [];
-init();
 
 function generateRandomLetter() {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";     
@@ -28,31 +25,48 @@ function generateCreatedTime(){
     return date.toISOString();
 }
 
-function findNotesIndex(id){
-    return notesData.findIndex(note=> note.id === id);
+// Show loading state in the UI
+function showLoading() {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'loading-overlay';
+    loadingOverlay.innerHTML = `
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    `;
+    document.body.appendChild(loadingOverlay);
 }
+
+// Hide loading state
+function hideLoading() {
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.remove();
+    }
+}
+
 
 async function deleteNote(id){
     try{
-        const index = findNotesIndex(id);
-        const note = await notesData[index];
+        showLoading();
+        const note = await getSingleNote(id);
         if (note) {
             const response = await deleteNotes(note);
             console.log("Delete Response : ",response);
             if (response.status === "success") {
-              notesData.splice(index,1);
                 document.querySelector("note-render").render();
-
             }
         }
     } catch(error) {
         console.log(error);
+    } finally {
+        hideLoading();
     }
 }
 
 async function archiveNote(id){
     try{
-        const note = await notesData[findNotesIndex(id)];
+        showLoading();
+        const note = await getSingleNote(id);
         if(note){
             note.archived = true;
             const response =  await archiveNotes(note);
@@ -65,12 +79,15 @@ async function archiveNote(id){
         document.querySelector("note-render").render();
     } catch(error) {
         console.log(error);
+    } finally {
+        hideLoading();
     }
 }
 
 async function unarchiveNote(id){
     try{
-        const note = await notesData[findNotesIndex(id)];
+        showLoading();
+        const note = await getSingleNote(id);
         if(note){
             note.archived = false;
             const response =  await unarchiveNotes(note);
@@ -83,14 +100,8 @@ async function unarchiveNote(id){
         document.querySelector("note-render").render();
     }catch(error){
         console.log(error);
-    }
-}
-
-function customValidationHandler(event){
-    event.target.setCustomValidation('');
-    if(event.target.validity.valueMissing) {
-        event.target.setCustomValidation("Wajib diisi!.");
-        return;
+    }finally {
+        hideLoading();
     }
 }
 
@@ -100,5 +111,6 @@ export {
     deleteNote, 
     archiveNote, 
     unarchiveNote, 
-    customValidationHandler 
+    showLoading,
+    hideLoading
 } ;

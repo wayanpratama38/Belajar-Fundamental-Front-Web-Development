@@ -36,6 +36,23 @@ const getArchivedNotes = async () => {
   })
 }
 
+const getSingleNote = async (id) => {
+  return await fetch(`${baseUrl}/notes/${id}`)
+  .then((response)=>{
+    if(response.status === 200){
+      return response.json();
+    }else {
+      return [];
+    }
+  })
+  .then((responseJson)=>{
+    return responseJson.data;
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+}
+
 
 const insertNotes = async (note) => {
   const title = typeof note.title === "string" ? note.title : String(note.title);
@@ -139,5 +156,6 @@ export {
   getArchivedNotes,
   insertNotes,
   unarchiveNotes,
-  deleteNotes
+  deleteNotes,
+  getSingleNote
 };
