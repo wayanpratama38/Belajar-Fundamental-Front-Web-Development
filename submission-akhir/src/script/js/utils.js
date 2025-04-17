@@ -1,4 +1,6 @@
-import {notesData} from "./data/data.js";
+import { getAllNotes } from "./data/data.js";
+
+const notesData = getAllNotes();
 
 function generateRandomLetter() {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";     

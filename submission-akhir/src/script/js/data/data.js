@@ -18,8 +18,6 @@ const getAllNotes = async () => {
   })
 }
 
-const notesData = getAllNotes();
-
 const filteredArchivedNotes = async () => {
   const notes = await getAllNotes();
   return notes
@@ -43,26 +41,31 @@ const filteredActiveNotes = async () => {
   });
 }
 
-const insertNotes = (notes) => {
-  fetch(`${baseUrl}/notes`,{
+const insertNotes = async (note) => {
+  await fetch(`${baseUrl}/notes`,{
     method : "POST",
-    body : {
-      title : String,
-      body : String,
+    body : JSON.stringify({
+      title : note.title,
+      body : note.body,
+    }),
+    headers : {
+      'Content-type' : 'application/json'
     }
   })
-  .then((response)=>{
-    return response.json();
+  .then(async (response)=>{
+    return response.json().then(data=>{
+      if(!response.ok){
+        throw new Error(data.message)
+      }
+      return data
+    })
   })
-  .then((responseJson)=>{
-    if(responseJson.error){
-      console.log(responseJson.message);
-    } 
-    getAllNotes();
+  .then((data)=>{
+    console.log(data);
   })
   .catch((error)=>{
     console.log(error)
   })
 }
 
-export { notesData, filteredActiveNotes, filteredArchivedNotes };
+export { getAllNotes, insertNotes, filteredActiveNotes, filteredArchivedNotes };

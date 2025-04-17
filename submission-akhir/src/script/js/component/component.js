@@ -1,5 +1,5 @@
 import { generateCreatedTime, generateRandomID, deleteNote, archiveNote, unarchiveNote, customValidationHandler } from "../utils.js";
-import { notesData, filteredActiveNotes, filteredArchivedNotes } from "../data/data.js";
+import { filteredActiveNotes, filteredArchivedNotes, insertNotes } from "../data/data.js";
 import "../../style/style.css";
 
 
@@ -38,17 +38,17 @@ class NoteForm extends HTMLElement{
             addNoteButton.disabled = !(title.value && message.value);
         });
 
-        form.addEventListener("submit",(event)=>{
+        form.addEventListener("submit", async (event)=>{
             event.preventDefault();
             const isArchive = this.querySelector("#check").checked;
-            const newNotes ={
+            const newNotes = {
                 id : generateRandomID(),
                 title : title.value,
                 body : message.value,
                 createdAt : generateCreatedTime(),
                 archived : isArchive
             }
-            notesData.push(newNotes);
+            await insertNotes(newNotes);
             document.querySelector("note-render").render();
         });
 
